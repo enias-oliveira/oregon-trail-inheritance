@@ -1,62 +1,88 @@
-function Traveler (name) {
-  this.name = name
-  this.food = 1
-  this.isHealthy = true
-}
+class Traveler {
+  constructor (name) {
+    this._name = name
+    this._food = 1
+    this._isHealthy = true
+  }
 
-Traveler.prototype.setFood = function (amount) {
-  this.food = amount
-}
+  get name () {
+    return this._name
+  }
 
-Traveler.prototype.getFood = function () {
-  return this.food
-}
+  set name (newName) {
+    this._name = newName
+  }
 
-Traveler.prototype.changeHealth = function () {
-  this.isHealthy = !this.isHealthy
-}
+  set food (amount) {
+    this._food = amount
+  }
 
-Traveler.prototype.hunt = function () {
-  const newFood = this.getFood() + 2
-  this.setFood(newFood)
-}
+  get food () {
+    return this._food
+  }
 
-Traveler.prototype.eat = function () {
-  const newFood = this.getFood()
-  if (newFood > 0) {
-    this.setFood(newFood - 1)
-  } else { this.changeHealth() }
-}
+  get isHealthy () {
+    return this._isHealthy
+  }
 
-function Wagon (capacity) {
-  this.capacity = capacity
-  this.passengers = []
-}
+  set isHealthy (bool) {
+    this._isHealthy = bool
+  }
 
-Wagon.prototype.getCapacity = function () {
-  return this.capacity
-}
+  changeHealth () {
+    this._isHealthy = !this._isHealthy
+  }
 
-Wagon.prototype.getPassengersCount = function () {
-  return this.passengers.length
-}
+  hunt () {
+    this.food += 2
+  }
 
-Wagon.prototype.getAvailableSeatCount = function () {
-  return this.getCapacity() - this.getPassengersCount()
-}
-
-Wagon.prototype.join = function (traveler) {
-  if (this.getAvailableSeatCount() > 0) {
-    this.passengers.push(traveler)
+  eat () {
+    if (this.food > 0) {
+      this.food -= 1
+    } else { this.changeHealth() }
   }
 }
 
-Wagon.prototype.shouldQuarantine = function () {
-  return this.passengers.some(passenger => passenger.isHealthy)
-}
+class Wagon {
+  constructor (capacity) {
+    this._capacity = capacity
+    this._passengers = []
+  }
 
-Wagon.prototype.totalFood = function () {
-  return this.passengers.reduce((total, passenger) => total + passenger.getFood(), 0)
+  get capacity () {
+    return this._capacity
+  }
+
+  get passengers () {
+    return this._passengers
+  }
+
+  set capacity (amount) {
+    this._capacity = amount
+  }
+
+  set passengers (amount) {
+    this._passengers = amount
+  }
+
+  getAvailableSeatCount () {
+    return this.capacity - this.passengers.length
+  }
+
+  join (traveler) {
+    if (this.getAvailableSeatCount() > 0) {
+      this._passengers.push(traveler)
+    }
+  }
+
+  shouldQuarantine () {
+    return this.passengers.some(passenger => passenger.isHealthy)
+  }
+
+  totalFood () {
+    return this.passengers.reduce((total, passenger) => total + passenger.food, 0)
+  }
 }
 
 // Criar uma carroça que comporta 2 pessoas
